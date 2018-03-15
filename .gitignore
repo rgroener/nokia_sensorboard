@@ -9,4 +9,6 @@ Archiv
 *.eep
 *.o
 *.sym
-*.Nokia_Gock*
+Nokia_Gock_LCD-Assistant_Config.xml
+*BMP280_driver-master*
+.gitignore
