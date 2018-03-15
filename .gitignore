@@ -10,5 +10,5 @@ Archiv
 *.o
 *.sym
 Nokia_Gock_LCD-Assistant_Config.xml
-*BMP280_driver-master*
+BMP280_driver-master
 .gitignore
