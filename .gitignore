@@ -1,0 +1,12 @@
+Archiv
+*.zip
+.dep
+*.hex
+*.lss
+*.lst
+*.map
+*.elf
+*.eep
+*.o
+*.sym
+*.Nokia_Gock*
