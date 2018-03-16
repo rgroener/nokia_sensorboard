@@ -2,7 +2,7 @@
 
 
 */
-
+#define F_CPU 16000000UL  // 1 MHz
 #include <avr/io.h>
 #include "glcd/glcd.h"
 #include <avr/interrupt.h>
@@ -11,7 +11,9 @@
 #include "glcd/fonts/Liberation_Sans15x21_Numbers.h"
 #include "glcd/fonts/font5x7.h"
 #include <avr/pgmspace.h>
-#define F_CPU 16000000UL  // 1 MHz
+#include "grn_TWI.h"
+#include "grn_24C512.h"
+
 
 #define T_RED !(PIND & (1<<PD5)) && (entprell == 0)
 #define T_BLUE !(PIND & (1<<PD6)) && (entprell == 0)
@@ -21,8 +23,13 @@
 #define LED_EIN PORTC |= (1<<PC3)
 #define LED_AUS	PORTC &= ~(1<<PC3);					//LED ausschalten
 
-uint16_t zaehler;
+
+uint8_t test1;
+uint16_t zaehler, test2;
+
+// String für Zahlenausgabe
 char string[8] = "";
+
 uint8_t ms, ms10,ms100,sec,min,entprell, state;
 uint8_t end_ms100, end_sec, end_min;
 enum state{WAIT, COUNT, TIME, TIME_WAIT,FLIGHT_TIME};
@@ -151,28 +158,48 @@ int main(void)
 	
 	zaehler=222;
 	entprell=0;
+	test1=0;
+	test2=0;
+	ms10=0;
+	ms100=0;
+	sec=0;
+	min=0;
 	
-	glcd_tiny_set_font(Font5x7,5,7,32,127);
-	glcd_clear_buffer();
-	glcd_clear();
-	sprintf(string,"%01d",zaehler);
-	glcd_draw_string_xy(0,0,string);
+	
+		glcd_tiny_set_font(Font5x7,5,7,32,127);
+		glcd_clear_buffer();
 	
 	
-	while(1) 
-	{
+	/*	
+		EEWrite_8(1, 1, 5);
+		test1=55;
+		test1=EERead_8(1, 1);
+		*/
+		
+		
+		
+		
+		
+		
+		glcd_write();
+		
+		while(1) 
+		{
+		
+		
+			sprintf(string,"%01d",sec);
+			glcd_draw_string_xy(0,0,string);
+		
+		
+		
 		if(T_RED)
 		{
-			entprell==RELOAD_ENTPRELL;
 			LED_AUS;
 		}else
 		{
 			LED_EIN;
 		}
-		switch(state)
-		{
 		
-		}//End of switch
 
 	glcd_write();
 	}//End of while
