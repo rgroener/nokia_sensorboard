@@ -24,8 +24,8 @@
 #define LED_AUS	PORTC &= ~(1<<PC3);					//LED ausschalten
 
 
-uint8_t test1;
-uint16_t zaehler, test2;
+uint8_t test1, test1_alt;
+uint16_t zaehler, test2, test2_alt;
 
 // String für Zahlenausgabe
 char string[8] = "";
@@ -159,7 +159,9 @@ int main(void)
 	zaehler=222;
 	entprell=0;
 	test1=0;
+	test1_alt=0;
 	test2=0;
+	test2_alt=0;
 	ms10=0;
 	ms100=0;
 	sec=0;
@@ -170,26 +172,22 @@ int main(void)
 		glcd_clear_buffer();
 	
 	
-	/*	
-		EEWrite_8(1, 1, 5);
-		test1=55;
-		test1=EERead_8(1, 1);
-		*/
-		
-		
-		
-		
-		
-		
-		glcd_write();
+	
+		EEWrite_16(1, 1, 1234);
+		test2=555;
+		_delay_ms(100);
+		test2=EERead_16(1, 1);
+		test2_alt=222;
 		
 		while(1) 
 		{
 		
-		
-			sprintf(string,"%01d",sec);
-			glcd_draw_string_xy(0,0,string);
-		
+			if(test2 != test2_alt)
+			{
+				test2_alt=test2;
+				sprintf(string,"%01d",test2);
+				glcd_draw_string_xy(0,0,string);
+			}
 		
 		
 		if(T_RED)

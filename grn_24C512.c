@@ -1,3 +1,18 @@
+/*
+ * 24C256 und 24C512 sind beide kompatibel bezüglich Adressierung
+ * 
+ * Achtung!!!!  Wenn auf EEPROM geschrieben und gleich wieder gelesen 
+ * wird, kann es zu fehlerhaften Ausgaben kommen. Unbedingt ein paar 
+ * Milisekunden Delay einbauen bevor zurückgelesen wird...
+ * 
+ * 		EEWrite_8(1, 1, 123);
+ *		_delay_ms(50);
+ *		test=EERead_8(1, 1);
+ *		lcd_print(test);
+ * 
+ * 
+ * */
+#define F_CPU 16000000UL  // 1 MHz
 #include <stdio.h>
 #include <avr/io.h>
 #include <util/delay.h>
