@@ -13,6 +13,7 @@
 #include <avr/pgmspace.h>
 #include "grn_TWI.h"
 #include "grn_24C512.h"
+#include "grn_rtc.h"
 
 
 #define T_RED !(PIND & (1<<PD5)) && (entprell == 0)
@@ -27,8 +28,10 @@
 uint8_t test1, test1_alt;
 uint16_t zaehler, test2, test2_alt;
 
+uint8_t sekunden, sekunden_alt, minuten, stunden;
+
 // String für Zahlenausgabe
-char string[8] = "";
+char string[30] = "";
 
 uint8_t ms, ms10,ms100,sec,min,entprell, state;
 uint8_t end_ms100, end_sec, end_min;
@@ -120,9 +123,6 @@ const unsigned char bitmap[] PROGMEM=
 
 int main(void)
 {
-	
-
-	
 	/* Backlight pin PL3, set as output, set high for 100% output */
 	DDRB |= (1<<PB2);
 	//PORTB |= (1<<PB2);
@@ -155,6 +155,10 @@ int main(void)
     // enable interrupts
 	
 	setup();
+	rtc_init();
+	rtc_start();
+	
+	
 	
 	zaehler=222;
 	entprell=0;
@@ -166,28 +170,37 @@ int main(void)
 	ms100=0;
 	sec=0;
 	min=0;
+	sekunden=0;
+	sekunden_alt=0;
+	minuten=0;
+	stunden=0;
 	
 	
 		glcd_tiny_set_font(Font5x7,5,7,32,127);
 		glcd_clear_buffer();
+		rtc_stop();
+		rtc_set_time(0, 0, 0);
+		rtc_start();
 	
 	
-	
-		EEWrite_16(1, 1, 1234);
-		test2=555;
-		_delay_ms(100);
-		test2=EERead_16(1, 1);
-		test2_alt=222;
 		
 		while(1) 
-		{
-		
-			if(test2 != test2_alt)
+		{	
+			sekunden = rtc_read_sec();
+			if(sekunden != sekunden_alt)
 			{
-				test2_alt=test2;
-				sprintf(string,"%01d",test2);
-				glcd_draw_string_xy(0,0,string);
+				sekunden_alt=sekunden;
+				minuten = rtc_read_min();
+				stunden = rtc_read_hour();
+				glcd_clear();
+				
+				sprintf(string,"%01d : %01d : %01d",stunden, minuten, sekunden);
+				glcd_draw_string_xy(10,0,string);
 			}
+			
+			
+				
+		
 		
 		
 		if(T_RED)
@@ -198,7 +211,7 @@ int main(void)
 			LED_EIN;
 		}
 		
-
+	
 	glcd_write();
 	}//End of while
 	
