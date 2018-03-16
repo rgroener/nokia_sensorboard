@@ -18,6 +18,11 @@
 #define T_GREEN !(PIND & (1<<PD2)) && (entprell == 0)
 #define RELOAD_ENTPRELL 80
 
+#define LED_EIN PORTC |= (1<<PC3)
+#define LED_AUS	PORTC &= ~(1<<PC3);					//LED ausschalten
+
+uint16_t zaehler;
+char string[8] = "";
 uint8_t ms, ms10,ms100,sec,min,entprell, state;
 uint8_t end_ms100, end_sec, end_min;
 enum state{WAIT, COUNT, TIME, TIME_WAIT,FLIGHT_TIME};
@@ -116,11 +121,9 @@ int main(void)
 	//PORTB |= (1<<PB2);
 	PORTB &= ~(1<<PB2);
 	
-	DDRC &= ~(1<<PC0); 	//Eingang Hallsensor
-	PORTC |= (1<<PC0);	//Pullup Hallsensor einschalten
 	
-	DDRC |=(1<<PC1); 	//Eingang Hallsensor
-	PORTC |= (1<<PC1);	//Pullup Hallsensor einschalten
+	DDRC |=(1<<PC3); 	//Ausgang LED
+	PORTC |= (1<<PC3);	//Led ein
 	
 	
 	DDRD &= ~((1<<PD6) | (1<<PD2) | (1<<PD5)); 	//Taster 1-3
@@ -146,17 +149,26 @@ int main(void)
 	
 	setup();
 	
+	zaehler=222;
+	entprell=0;
 	
 	glcd_tiny_set_font(Font5x7,5,7,32,127);
 	glcd_clear_buffer();
 	glcd_clear();
-	glcd_tiny_draw_string(0,1,"Timer is ready");
-	glcd_write();
+	sprintf(string,"%01d",zaehler);
+	glcd_draw_string_xy(0,0,string);
 	
 	
 	while(1) 
 	{
-		
+		if(T_RED)
+		{
+			entprell==RELOAD_ENTPRELL;
+			LED_AUS;
+		}else
+		{
+			LED_EIN;
+		}
 		switch(state)
 		{
 		
