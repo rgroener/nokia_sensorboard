@@ -49,13 +49,14 @@ uint8_t TWIReadNACK(void)
 
 uint8_t TWIGetStatus(void)
 {
-	/*  0x08   Start condition sent
-	 *  0x10   repeated start condition sent
-	 *  0x18   SLA+W transmitted ACK received
-	 *  0x20   SLA+W transmitted NACK received
-	 *  0x28   data byte sent ACK received
-	 *  0x30   data byte sent NACK received
-	 *  0x38   Arbitration in SLA+W lost
+	/*  0x08   	Start condition sent
+	 *  0x10   	repeated start condition sent
+	 *  0x18   	SLA+W transmitted ACK received
+	 *  0x20   	SLA+W transmitted NACK received
+	 *  0x28   	data byte sent ACK received
+	 *  0x30   	data byte sent NACK received
+	 *  0x38   	Arbitration in SLA+W lost
+	 * 	0x40	TW_MR_SLA_ACK
 	 */
 	 
 	uint8_t status;

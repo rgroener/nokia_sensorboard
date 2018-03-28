@@ -14,6 +14,9 @@
 #include "grn_TWI.h"
 #include "grn_24C512.h"
 #include "grn_rtc.h"
+#include "ftoa.h"
+#include "test.h"
+
 
 
 #define T_RED !(PIND & (1<<PD5)) && (entprell == 0)
@@ -25,9 +28,9 @@
 #define LED_AUS	PORTC &= ~(1<<PC3);					//LED ausschalten
 
 
-uint8_t test1, test1_alt;
-uint16_t zaehler, test2, test2_alt;
-
+uint8_t test1, test1_alt, aaa,bbb,ccc, ddd, error;
+uint16_t zaehler, test2, test2_alt, test3;
+uint32_t temperatur;
 uint8_t sekunden, sekunden_alt, minuten, stunden;
 
 // String für Zahlenausgabe
@@ -36,6 +39,10 @@ char string[30] = "";
 uint8_t ms, ms10,ms100,sec,min,entprell, state;
 uint8_t end_ms100, end_sec, end_min;
 enum state{WAIT, COUNT, TIME, TIME_WAIT,FLIGHT_TIME};
+
+
+
+
 
 
 
@@ -174,18 +181,47 @@ int main(void)
 	sekunden_alt=0;
 	minuten=0;
 	stunden=0;
+	test3=0;
+	aaa=255;
+	bbb=0;
+	ccc=0;
+	ddd=0;
+	temperatur=0;
+	error=0;
 	
+	
+
+
 	
 		glcd_tiny_set_font(Font5x7,5,7,32,127);
 		glcd_clear_buffer();
 		rtc_stop();
 		rtc_set_time(0, 0, 0);
 		rtc_start();
-	
-	
+		
+		/*
+		EEWrite_8(1, 1, 123);
+ 		_delay_ms(50);
+ 		test1=EERead_8(0, 1);
+ 		*/
+ 		
+ 		error = bme280_init();
+ 		test1=bme280_read8(REG_ID);
+		glcd_clear();
+		
+		/*
+		//wechselt die Bitreihenfolge
+		test2 = 255;
+		test3 = (test2>>8) | (test2<<8);
+		*/
+		
+		
+		
 		
 		while(1) 
 		{	
+			
+		
 			sekunden = rtc_read_sec();
 			if(sekunden != sekunden_alt)
 			{
@@ -194,9 +230,19 @@ int main(void)
 				stunden = rtc_read_hour();
 				glcd_clear();
 				
+				temperatur = bme280_read_temp();
+		
+			
+				sprintf(string,"Temp: %d.%1.2d", vor_komma(temperatur), nach_komma(temperatur) );
+				glcd_draw_string_xy(0,0,string);
+			
+				sprintf(string,"%lu", temperatur);
+				glcd_draw_string_xy(0,15,string);
+				
 				sprintf(string,"%01d : %01d : %01d",stunden, minuten, sekunden);
-				glcd_draw_string_xy(10,0,string);
+				glcd_draw_string_xy(0,30,string);
 			}
+			
 			
 			
 				

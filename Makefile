@@ -52,7 +52,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c glcd/glcd.c glcd/devices/AVR8.c glcd/controllers/PCD8544.c glcd/graphs.c glcd/text.c glcd/graphics.c glcd/unit_tests.c glcd/text_tiny.c grn_24C512.c grn_TWI.c grn_rtc.c
+SRC = $(TARGET).c glcd/glcd.c glcd/devices/AVR8.c glcd/controllers/PCD8544.c glcd/graphs.c glcd/text.c glcd/graphics.c glcd/unit_tests.c glcd/text_tiny.c grn_24C512.c grn_TWI.c grn_rtc.c test.c
 
 
 # List Assembler source files here.
