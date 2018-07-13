@@ -57,6 +57,8 @@ uint8_t TWIGetStatus(void)
 	 *  0x30   	data byte sent NACK received
 	 *  0x38   	Arbitration in SLA+W lost
 	 * 	0x40	TW_MR_SLA_ACK
+	 *  0x50
+	 * 	0x58
 	 */
 	 
 	uint8_t status;

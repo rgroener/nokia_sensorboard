@@ -1,4 +1,3 @@
-
 uint16_t rtc_init(void);
 void rtc_start(void);
 void rtc_stop(void);
